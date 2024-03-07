@@ -2,12 +2,14 @@
 using KnowWeatherApp.API.Interfaces;
 using KnowWeatherApp.API.Models;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KnowWeatherApp.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UserWeatherReportController : ControllerBase
     {
         private readonly IUserWeatherReportRepository userWeatherReportRepository;

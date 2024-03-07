@@ -1,9 +1,13 @@
 using KnowWeatherApp.API.Configurations;
+using KnowWeatherApp.API.Entities;
 using KnowWeatherApp.API.Helpers;
 using KnowWeatherApp.API.Interfaces;
 using KnowWeatherApp.API.Repositories;
 using KnowWeatherApp.API.Services;
 using Mapster;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using WeatherPass.FunctionApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +20,13 @@ builder.Services.AddScoped<IOpenWeatherRepository, OpenWeatherRepository>();
 builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddHostedService<WeatherReportService>();
 
+builder.Services.AddDbContext<KnowWeatherDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<KnowWeatherDbContext>();
+
+
 TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 builder.Services.AddMapster();
 
@@ -26,6 +37,34 @@ builder.Services.Configure<MongoDatabaseSettings>(
 
 builder.Services.Configure<OpenWeatherSettings>(
     builder.Configuration.GetSection("OpenWeatherSettings"));
+
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "KnowWeather.API", Version = "v1" });
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 builder.Services.AddHttpClient("WeatherAPI", options =>
 {
@@ -47,7 +86,12 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseHttpsRedirection();
-app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapIdentityApi<IdentityUser>();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Addresses}/{action=Index}");
