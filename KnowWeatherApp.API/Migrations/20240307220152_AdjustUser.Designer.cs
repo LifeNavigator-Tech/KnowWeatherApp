@@ -4,6 +4,7 @@ using KnowWeatherApp.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KnowWeatherApp.API.Migrations
 {
     [DbContext(typeof(KnowWeatherDbContext))]
-    partial class KnowWeatherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240307220152_AdjustUser")]
+    partial class AdjustUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,17 +33,7 @@ namespace KnowWeatherApp.API.Migrations
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
                     b.HasKey("CitiesId", "UsersId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("CityId");
 
                     b.HasIndex("UsersId");
 
@@ -281,21 +274,11 @@ namespace KnowWeatherApp.API.Migrations
 
             modelBuilder.Entity("AppUserCity", b =>
                 {
-                    b.HasOne("KnowWeatherApp.API.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("KnowWeatherApp.API.Entities.City", null)
                         .WithMany()
                         .HasForeignKey("CitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("KnowWeatherApp.API.Entities.City", null)
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("KnowWeatherApp.API.Entities.AppUser", null)
                         .WithMany()

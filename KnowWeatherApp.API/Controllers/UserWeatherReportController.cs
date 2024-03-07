@@ -39,7 +39,7 @@ namespace KnowWeatherApp.API.Controllers
         [HttpGet("location")]
         public async Task<IActionResult> GetWeatherReportByCity(double lat, double lon, CancellationToken cancel)
         {
-            var cityReport = await this.openWeatherRepository.GetWeatherByCity(new Location() { Lat = lat, Lon = lon }, cancel);
+            var cityReport = await this.openWeatherRepository.GetWeatherByLocation(lat, lon, cancel);
             return Ok(cityReport);
         }
 

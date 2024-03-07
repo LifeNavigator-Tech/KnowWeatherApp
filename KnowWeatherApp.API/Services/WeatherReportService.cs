@@ -61,7 +61,7 @@ namespace KnowWeatherApp.API.Services
 
                         foreach (var city in report.Cities)
                         {
-                            var weatherReport = await openWeatherRepository.GetWeatherByCity(city.Coord, CancellationToken.None);
+                            var weatherReport = await openWeatherRepository.GetWeatherByLocation(city.Lat, city.Lon, CancellationToken.None);
                             weatherReport.City = city;
                             report.WeatherReports.Add(weatherReport);
                         }

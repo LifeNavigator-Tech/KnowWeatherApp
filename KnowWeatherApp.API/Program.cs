@@ -23,7 +23,7 @@ builder.Services.AddHostedService<WeatherReportService>();
 builder.Services.AddDbContext<KnowWeatherDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<KnowWeatherDbContext>();
 
 

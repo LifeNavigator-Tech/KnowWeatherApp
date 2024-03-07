@@ -18,11 +18,11 @@ namespace KnowWeatherApp.API.Repositories
             this.options = options;
         }
 
-        public async Task<WeatherReport> GetWeatherByCity(Location location, CancellationToken cancel)
+        public async Task<WeatherReport> GetWeatherByLocation(double lat, double lon, CancellationToken cancel)
         {
             using var httpclient = this.httpClientFactory.CreateClient("WeatherAPI");
 
-            var weatherUrlQuery = $"?lat={location.Lat}&lon={location.Lon}&appid={this.options.Value.APIKEY}&units=imperial";
+            var weatherUrlQuery = $"?lat={lat}&lon={lon}&appid={this.options.Value.APIKEY}&units=imperial";
             var response = await httpclient.GetAsync(weatherUrlQuery, cancel);
 
             response.EnsureSuccessStatusCode();
