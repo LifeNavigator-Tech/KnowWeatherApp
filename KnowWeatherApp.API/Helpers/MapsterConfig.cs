@@ -11,34 +11,19 @@ public static class MapsterConfig
     {
         TypeAdapterConfig<WeatherReportDto, WeatherReport>
         .NewConfig()
-        .MapWith((report) => new WeatherReport()
-        {
-            Lat = report.Lat,
-            Lon = report.Lon,
-            Current = report.Current.Adapt<CurrentWeatherReport>(),
-            TimeZone = report.TimeZone,
-            TimeZoneOffset = report.TimeZoneOffset,
-            HourlyReports = report.Hourly.Select(x => x.Adapt<HourlyWeatherReport>()).ToList(),
-            DailyReports = report.Hourly.Select(x => x.Adapt<DailyWeatherReport>()).ToList(),
-        });
+            .Map(dest => dest.Current, src => src.Current.Adapt<CurrentWeatherReport>())
+            .Map(dest => dest.HourlyReports, src => src.Hourly.Select(x => x.Adapt<HourlyWeatherReport>()))
+            .Map(dest => dest.DailyReports, src => src.Daily.Select(x => x.Adapt<DailyWeatherReport>()).ToList());
 
         TypeAdapterConfig<WeatherReport, WeatherReportDto>
-            .NewConfig()
-            .MapWith((report) => new WeatherReportDto()
-            {
-                Lat = report.Lat,
-                Lon = report.Lon,
-                Current = report.Current.Adapt<CurrentWeatherReportDto>(),
-                TimeZone = report.TimeZone,
-                TimeZoneOffset = report.TimeZoneOffset,
-                Hourly = report.HourlyReports.Select(x => x.Adapt<HourlyWeatherReportDto>()).ToList(),
-                Daily = report.DailyReports.Select(x => x.Adapt<DailyWeatherReportDto>()).ToList(),
-            });
+        .NewConfig()
+            .Map(dest => dest.Current, src => src.Current.Adapt<CurrentWeatherReportDto>())
+            .Map(dest => dest.Hourly, src => src.HourlyReports.Select(x => x.Adapt<HourlyWeatherReportDto>()))
+            .Map(dest => dest.Daily, src => src.DailyReports.Select(x => x.Adapt<DailyWeatherReportDto>()).ToList());
 
-        TypeAdapterConfig<City, CityDto>.NewConfig()
-            .MapWith(city => new CityDto()
-            {
-                WeatherReport = city.Adapt<WeatherReportDto>(),
-            });
+        TypeAdapterConfig<City, CityDto>
+            .NewConfig()
+            .Map(dest => dest.WeatherReport, src => src.WeatherReport.Adapt<WeatherReportDto>())
+            .TwoWays();
     }
 }

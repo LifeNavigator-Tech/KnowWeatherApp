@@ -4,9 +4,9 @@ using KnowWeatherApp.API.Interfaces;
 using KnowWeatherApp.API.Repositories;
 using KnowWeatherApp.API.Services;
 using Mapster;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using WeatherPass.FunctionApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IWeatherReportRepository, UserWeatherReportRepository>();
 builder.Services.AddScoped<IOpenWeatherRepository, OpenWeatherRepository>();
+builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
 builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddHostedService<WeatherReportService>();
 
@@ -28,7 +29,7 @@ builder.Services.AddIdentityApiEndpoints<AppUser>()
 
 TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 builder.Services.AddMapster();
-
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 
 builder.Services.Configure<OpenWeatherSettings>(
@@ -46,6 +47,7 @@ builder.Services.AddSwaggerGen(opt =>
         BearerFormat = "JWT",
         Scheme = "bearer"
     });
+    opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
     opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -85,6 +87,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.SetCurrentUser();
 
 app.MapIdentityApi<AppUser>();
 

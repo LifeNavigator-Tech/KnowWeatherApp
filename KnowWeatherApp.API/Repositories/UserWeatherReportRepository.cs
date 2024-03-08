@@ -26,15 +26,19 @@ namespace KnowWeatherApp.API.Repositories
                 return false;
             }
 
-            var weatherEntity = await context.WeatherReports.FirstOrDefaultAsync(x => x.CityId == cityId);
+            var weatherEntity = await context.WeatherReports.Include(x => x.City).FirstOrDefaultAsync(x => x.CityId == cityId);
+
             if (weatherEntity == null)
             {
                 await this.context.WeatherReports.AddAsync(weatherReport);
             }
             else
             {
-                weatherEntity = weatherReport;
+                weatherEntity.DailyReports = weatherReport.DailyReports;
+                weatherEntity.HourlyReports = weatherReport.HourlyReports;
+                weatherEntity.Current = weatherReport.Current;
             }
+
 
             await context.SaveChangesAsync(cancel);
             return true;
@@ -43,9 +47,13 @@ namespace KnowWeatherApp.API.Repositories
         public async Task<IEnumerable<City>> GetCitiesToUpdate(CancellationToken cancel)
             => await context.Cities.Where(s => s.Users.Count > 0).ToListAsync(cancel);
 
-        public async Task<IEnumerable<City>> GetUserWeatherReport(string userId, CancellationToken cancel)
-            => await context.Cities.Where(x => x.Users.Select(u => u.Id).Contains(userId))
-            .Include(x => x.WeatherReport)
-            .ToListAsync(cancel);
+        public async Task<City?> GetUserWeatherReport(string userId, string cityId, CancellationToken cancel)
+            => await context.Cities
+                             .Include(x => x.WeatherReport)
+                                .ThenInclude(x => x.DailyReports)
+                             .Include(x => x.WeatherReport)
+                                .ThenInclude(x => x.HourlyReports)
+                            .FirstOrDefaultAsync(x => x.Users.Select(u => u.Id).Contains(userId) 
+                                                    && x.Id == cityId, cancel);
     }
 }
