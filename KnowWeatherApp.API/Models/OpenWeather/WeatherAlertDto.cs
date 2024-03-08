@@ -1,7 +1,5 @@
 ﻿using KnowWeatherApp.API.Helpers;
-using System.ComponentModel;
 using System.Text.Json.Serialization;
-using WeatherPass.FunctionApp.Helpers;
 
 namespace KnowWeatherApp.API.Models.OpenWeather;
 

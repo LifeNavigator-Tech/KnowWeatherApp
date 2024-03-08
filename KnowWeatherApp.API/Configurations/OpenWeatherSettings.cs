@@ -1,4 +1,4 @@
-namespace WeatherPass.FunctionApp.Helpers;
+namespace KnowWeatherApp.API.Configurations;
 
 public class OpenWeatherSettings
 {

@@ -1,3 +1,4 @@
+using KnowWeatherApp.API.Configurations;
 using KnowWeatherApp.API.Entities;
 using KnowWeatherApp.API.Helpers;
 using KnowWeatherApp.API.Interfaces;
@@ -7,7 +8,6 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using WeatherPass.FunctionApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,8 @@
-﻿using KnowWeatherApp.API.Entities.Weather;
+﻿using KnowWeatherApp.API.Configurations;
+using KnowWeatherApp.API.Entities.Weather;
 using KnowWeatherApp.API.Interfaces;
 using Mapster;
 using Microsoft.Extensions.Options;
-using WeatherPass.FunctionApp.Helpers;
 
 namespace KnowWeatherApp.API.Services
 {

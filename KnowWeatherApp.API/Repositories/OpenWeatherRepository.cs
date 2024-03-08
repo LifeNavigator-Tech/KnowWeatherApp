@@ -1,9 +1,9 @@
-﻿using KnowWeatherApp.API.Entities.Weather;
+﻿using KnowWeatherApp.API.Configurations;
+using KnowWeatherApp.API.Entities.Weather;
 using KnowWeatherApp.API.Interfaces;
 using KnowWeatherApp.API.Models.OpenWeather;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using WeatherPass.FunctionApp.Helpers;
 
 namespace KnowWeatherApp.API.Repositories
 {
