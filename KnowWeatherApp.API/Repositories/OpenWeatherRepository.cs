@@ -1,5 +1,4 @@
-﻿using KnowWeatherApp.API.Entities;
-using KnowWeatherApp.API.Entities.Weather;
+﻿using KnowWeatherApp.API.Entities.Weather;
 using KnowWeatherApp.API.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -30,8 +29,8 @@ namespace KnowWeatherApp.API.Repositories
             var content = await response.Content.ReadAsStringAsync();
 
             var weatherReport = JsonSerializer.Deserialize<WeatherReport>(
-                content, 
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true});
+                content,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             return weatherReport;
         }

@@ -1,4 +1,4 @@
 @KnowWeatherApp.API_HostAddress = http://localhost:5039
 
-GET {{KnowWeatherApp.API_HostAddress}}/Addresses?Name=Cottage%20Grove
+GET {{KnowWeatherApp.API_HostAddress}}/cities/search/?Name=Cottage
 Accept: application/json

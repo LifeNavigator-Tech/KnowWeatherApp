@@ -2,7 +2,7 @@
 
 namespace KnowWeatherApp.API.Models;
 
-public class RequestCityDto
+public class SearchCityRequestDto
 {
     [Required]
     [MinLength(2)]

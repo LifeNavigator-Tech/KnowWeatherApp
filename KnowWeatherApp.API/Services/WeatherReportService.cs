@@ -47,31 +47,21 @@ namespace KnowWeatherApp.API.Services
             {
                 var userWeatherReportRepository =
                     scope.ServiceProvider
-                        .GetRequiredService<IUserWeatherReportRepository>();
+                        .GetRequiredService<IWeatherReportRepository>();
 
                 var openWeatherRepository = scope.ServiceProvider.GetRequiredService<IOpenWeatherRepository>();
 
-                var reports = await userWeatherReportRepository.GetReportsToUpdate();
+                var cityRepository = scope.ServiceProvider.GetRequiredService<ICityRepository>();
 
-                if (reports.Count() > 0)
+                var cities = await userWeatherReportRepository.GetCitiesToUpdate(CancellationToken.None);
+
+                foreach (var city in cities)
                 {
-                    foreach (var report in reports)
-                    {
-                        report.WeatherReports = new List<Entities.Weather.WeatherReport>();
-
-                        foreach (var city in report.Cities)
-                        {
-                            var weatherReport = await openWeatherRepository.GetWeatherByLocation(city.Lat, city.Lon, CancellationToken.None);
-                            weatherReport.City = city;
-                            report.WeatherReports.Add(weatherReport);
-                        }
-                        report.Updated = DateTime.UtcNow;
-
-                        await userWeatherReportRepository.CreateOrUpdateUserWeatherReport(report.Id, report, CancellationToken.None);
-                    }
+                    var weatherReport = await openWeatherRepository.GetWeatherByLocation(city.Lat, city.Lon, CancellationToken.None);
+                    await userWeatherReportRepository.AssignReportToACityAsync(city.Id, weatherReport, CancellationToken.None);
                 }
 
-                logger.LogInformation($"Weather Report Service is working. Updated {reports.Count()} reports");
+                logger.LogInformation($"Weather Report Service is working. Updated {cities.Count()} cities");
             }
         }
     }

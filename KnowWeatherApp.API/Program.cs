@@ -1,4 +1,3 @@
-using KnowWeatherApp.API.Configurations;
 using KnowWeatherApp.API.Entities;
 using KnowWeatherApp.API.Helpers;
 using KnowWeatherApp.API.Interfaces;
@@ -14,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICityCosmoRepository, CityCosmoRepository>();
-builder.Services.AddScoped<IUserWeatherReportRepository, UserWeatherReportRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IWeatherReportRepository, UserWeatherReportRepository>();
 builder.Services.AddScoped<IOpenWeatherRepository, OpenWeatherRepository>();
 builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddHostedService<WeatherReportService>();
@@ -31,9 +30,6 @@ TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrate
 builder.Services.AddMapster();
 
 builder.Services.AddControllers();
-
-builder.Services.Configure<MongoDatabaseSettings>(
-    builder.Configuration.GetSection("MongoDatabaseSettings"));
 
 builder.Services.Configure<OpenWeatherSettings>(
     builder.Configuration.GetSection("OpenWeatherSettings"));
@@ -90,7 +86,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<AppUser>();
 
 app.MapControllerRoute(
     name: "default",

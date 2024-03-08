@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KnowWeatherApp.API.Entities.Weather;
+using System.ComponentModel.DataAnnotations;
 
 namespace KnowWeatherApp.API.Entities;
 
 public class City
 {
-    public int Id { get; set; }
-    public ICollection<AppUser> Users { get; set; }
+    [Key]
+    public string Id { get; set; }
+    public List<AppUser> Users { get; set; } = new List<AppUser>();
+    public virtual WeatherReport? WeatherReport { get; set; }
     [StringLength(256)]
     public string Name { get; set; }
     [StringLength(256)]

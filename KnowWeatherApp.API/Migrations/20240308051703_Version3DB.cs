@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KnowWeatherApp.API.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAuthentication : Migration
+    public partial class Version3DB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,22 @@ namespace KnowWeatherApp.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    State = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Lat = table.Column<double>(type: "float", nullable: false),
+                    Lon = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +172,83 @@ namespace KnowWeatherApp.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AppUserCity",
+                columns: table => new
+                {
+                    CitiesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CityId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserCity", x => new { x.CitiesId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_AppUserCity_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AppUserCity_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserCity_Cities_CitiesId",
+                        column: x => x.CitiesId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserCity_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WeatherReports",
+                columns: table => new
+                {
+                    WeatherReportId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CityId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Lat = table.Column<double>(type: "float", nullable: false),
+                    Lon = table.Column<double>(type: "float", nullable: false),
+                    TimeZone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeZoneOffset = table.Column<int>(type: "int", nullable: false),
+                    Current = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DailyReports = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HourlyReports = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeatherReports", x => x.WeatherReportId);
+                    table.ForeignKey(
+                        name: "FK_WeatherReports_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserCity_AppUserId",
+                table: "AppUserCity",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserCity_CityId",
+                table: "AppUserCity",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserCity_UsersId",
+                table: "AppUserCity",
+                column: "UsersId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,11 +287,20 @@ namespace KnowWeatherApp.API.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WeatherReports_CityId",
+                table: "WeatherReports",
+                column: "CityId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppUserCity");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -215,10 +317,16 @@ namespace KnowWeatherApp.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "WeatherReports");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
         }
     }
 }

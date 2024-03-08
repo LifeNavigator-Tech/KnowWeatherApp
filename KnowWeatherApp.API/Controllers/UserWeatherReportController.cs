@@ -4,6 +4,7 @@ using KnowWeatherApp.API.Models;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KnowWeatherApp.API.Controllers
 {
@@ -12,15 +13,18 @@ namespace KnowWeatherApp.API.Controllers
     [Authorize]
     public class UserWeatherReportController : ControllerBase
     {
-        private readonly IUserWeatherReportRepository userWeatherReportRepository;
+        private readonly IWeatherReportRepository userWeatherReportRepository;
         private readonly IOpenWeatherRepository openWeatherRepository;
+        private readonly ICityRepository cityRepository;
 
         public UserWeatherReportController(
-            IUserWeatherReportRepository userWeatherReportRepository,
-            IOpenWeatherRepository openWeatherRepository)
+            IWeatherReportRepository userWeatherReportRepository,
+            IOpenWeatherRepository openWeatherRepository,
+            ICityRepository cityRepository)
         {
             this.userWeatherReportRepository = userWeatherReportRepository;
             this.openWeatherRepository = openWeatherRepository;
+            this.cityRepository = cityRepository;
         }
 
         [HttpGet("{userId}")]
@@ -33,7 +37,7 @@ namespace KnowWeatherApp.API.Controllers
                 return NotFound();
             }
 
-            return Ok(report.Adapt<UserWeatherReportDto>());
+            return Ok(report);
         }
 
         [HttpGet("location")]
@@ -44,22 +48,12 @@ namespace KnowWeatherApp.API.Controllers
         }
 
         [HttpPost("{userId}")]
-        public async Task<IActionResult> CreateOrUpdateUserWeatherReport(string userId, [FromBody] CreateUserWeatherReportDto report, CancellationToken cancel)
+        public async Task<IActionResult> AddCityToUser(string userId, [FromBody] AddCityToUserRequest request, CancellationToken cancel)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                return BadRequest();
-            }
-            var userReport = await this.userWeatherReportRepository.GetUserWeatherReport(userId, cancel);
+            var result = await cityRepository.AddCityToUser(userId, request.CityId);
 
-            if (userReport != null)
-            {
-                userReport.Cities = report.Cities.Select(x => x.Adapt<City>()).ToList();
-                await this.userWeatherReportRepository.CreateOrUpdateUserWeatherReport(userId, userReport, cancel);
-            }
-
-
-            return Ok();
+            if (result) return Ok();
+            return BadRequest();
         }
 
 

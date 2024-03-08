@@ -4,6 +4,7 @@ using KnowWeatherApp.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KnowWeatherApp.API.Migrations
 {
     [DbContext(typeof(KnowWeatherDbContext))]
-    partial class KnowWeatherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308051703_Version3DB")]
+    partial class Version3DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
