@@ -11,21 +11,20 @@ using WeatherPass.FunctionApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IWeatherReportRepository, UserWeatherReportRepository>();
 builder.Services.AddScoped<IOpenWeatherRepository, OpenWeatherRepository>();
 builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
 builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddHostedService<WeatherReportService>();
 
 builder.Services.AddDbContext<KnowWeatherDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthorization();
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<KnowWeatherDbContext>();
-
 
 TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 builder.Services.AddMapster();
