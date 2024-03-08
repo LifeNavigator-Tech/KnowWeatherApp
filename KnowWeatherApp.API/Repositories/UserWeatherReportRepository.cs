@@ -20,12 +20,22 @@ namespace KnowWeatherApp.API.Repositories
 
         public async Task<bool> AssignReportToACityAsync(string cityId, WeatherReport weatherReport, CancellationToken cancel)
         {
-            var city = await context.Cities.FirstOrDefaultAsync(x => x.Id == cityId);
-            if (city == null)
+            var cityExists = await context.Cities.AnyAsync(x => x.Id == cityId);
+            if (!cityExists)
             {
                 return false;
             }
-            city.WeatherReport = weatherReport;
+
+            var weatherEntity = await context.WeatherReports.FirstOrDefaultAsync(x => x.CityId == cityId);
+            if (weatherEntity == null)
+            {
+                await this.context.WeatherReports.AddAsync(weatherReport);
+            }
+            else
+            {
+                weatherEntity = weatherReport;
+            }
+
             await context.SaveChangesAsync(cancel);
             return true;
         }

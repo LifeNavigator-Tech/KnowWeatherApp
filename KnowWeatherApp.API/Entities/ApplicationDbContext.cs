@@ -19,9 +19,10 @@ namespace KnowWeatherApp.API.Entities
                     l => l.HasOne(typeof(AppUser)).WithMany().OnDelete(DeleteBehavior.NoAction),
                     r => r.HasOne(typeof(City)).WithMany().OnDelete(DeleteBehavior.NoAction));
 
-            builder.Entity<City>()
-                .HasOne(x => x.WeatherReport)
-                .WithOne(x => x.City);
+            builder.Entity<WeatherReport>()
+                .HasOne(x => x.City)
+                .WithOne(x => x.WeatherReport)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<WeatherReport>()
                 .OwnsMany(

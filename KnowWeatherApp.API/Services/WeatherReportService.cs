@@ -1,4 +1,6 @@
-﻿using KnowWeatherApp.API.Interfaces;
+﻿using KnowWeatherApp.API.Entities.Weather;
+using KnowWeatherApp.API.Interfaces;
+using Mapster;
 using Microsoft.Extensions.Options;
 using WeatherPass.FunctionApp.Helpers;
 
@@ -57,8 +59,9 @@ namespace KnowWeatherApp.API.Services
 
                 foreach (var city in cities)
                 {
-                    var weatherReport = await openWeatherRepository.GetWeatherByLocation(city.Lat, city.Lon, CancellationToken.None);
-                    await userWeatherReportRepository.AssignReportToACityAsync(city.Id, weatherReport, CancellationToken.None);
+                    var modelWeather = await openWeatherRepository.GetWeatherByLocation(city.Lat, city.Lon, CancellationToken.None);
+                    var report = modelWeather.Adapt<WeatherReport>();
+                    await userWeatherReportRepository.AssignReportToACityAsync(city.Id, report, CancellationToken.None);
                 }
 
                 logger.LogInformation($"Weather Report Service is working. Updated {cities.Count()} cities");

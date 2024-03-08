@@ -30,14 +30,14 @@ namespace KnowWeatherApp.API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> Index(string userId, CancellationToken cancel)
         {
-            var report = await this.userWeatherReportRepository.GetUserWeatherReport(userId, cancel);
+            var reports = await this.userWeatherReportRepository.GetUserWeatherReport(userId, cancel);
 
-            if (report == null)
+            if (!reports.Any())
             {
                 return NotFound();
             }
-
-            return Ok(report);
+            var reportForCities = reports.AsQueryable().Select(s => s.Adapt<CityDto>());
+            return Ok(reportForCities);
         }
 
         [HttpGet("location")]

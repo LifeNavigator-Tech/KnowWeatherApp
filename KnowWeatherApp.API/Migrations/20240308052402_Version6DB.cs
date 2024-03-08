@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KnowWeatherApp.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Version3DB : Migration
+    public partial class Version6DB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,8 +212,6 @@ namespace KnowWeatherApp.API.Migrations
                 name: "WeatherReports",
                 columns: table => new
                 {
-                    WeatherReportId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     CityId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Lat = table.Column<double>(type: "float", nullable: false),
                     Lon = table.Column<double>(type: "float", nullable: false),
@@ -225,13 +223,12 @@ namespace KnowWeatherApp.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeatherReports", x => x.WeatherReportId);
+                    table.PrimaryKey("PK_WeatherReports", x => x.CityId);
                     table.ForeignKey(
                         name: "FK_WeatherReports_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -287,12 +284,6 @@ namespace KnowWeatherApp.API.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeatherReports_CityId",
-                table: "WeatherReports",
-                column: "CityId",
-                unique: true);
         }
 
         /// <inheritdoc />

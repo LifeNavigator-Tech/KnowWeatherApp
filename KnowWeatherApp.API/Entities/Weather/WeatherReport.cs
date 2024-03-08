@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KnowWeatherApp.API.Entities.Weather;
 
 public class WeatherReport
 {
-    public int WeatherReportId { get; set; }
+    [Key]
     [ForeignKey("City")]
     public string CityId { get; set; }
     public virtual City City { get; set; }

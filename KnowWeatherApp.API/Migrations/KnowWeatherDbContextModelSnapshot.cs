@@ -145,14 +145,7 @@ namespace KnowWeatherApp.API.Migrations
 
             modelBuilder.Entity("KnowWeatherApp.API.Entities.Weather.WeatherReport", b =>
                 {
-                    b.Property<int>("WeatherReportId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WeatherReportId"));
-
                     b.Property<string>("CityId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Lat")
@@ -167,10 +160,7 @@ namespace KnowWeatherApp.API.Migrations
                     b.Property<int>("TimeZoneOffset")
                         .HasColumnType("int");
 
-                    b.HasKey("WeatherReportId");
-
-                    b.HasIndex("CityId")
-                        .IsUnique();
+                    b.HasKey("CityId");
 
                     b.ToTable("WeatherReports");
                 });
@@ -338,13 +328,13 @@ namespace KnowWeatherApp.API.Migrations
                     b.HasOne("KnowWeatherApp.API.Entities.City", "City")
                         .WithOne("WeatherReport")
                         .HasForeignKey("KnowWeatherApp.API.Entities.Weather.WeatherReport", "CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.OwnsOne("KnowWeatherApp.API.Entities.Weather.CurrentWeatherReport", "Current", b1 =>
                         {
-                            b1.Property<int>("WeatherReportId")
-                                .HasColumnType("int");
+                            b1.Property<string>("WeatherReportCityId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("Clouds")
                                 .HasColumnType("int")
@@ -402,20 +392,20 @@ namespace KnowWeatherApp.API.Migrations
                                 .HasColumnType("float")
                                 .HasAnnotation("Relational:JsonPropertyName", "wind_speed");
 
-                            b1.HasKey("WeatherReportId");
+                            b1.HasKey("WeatherReportCityId");
 
                             b1.ToTable("WeatherReports");
 
                             b1.ToJson("Current");
 
                             b1.WithOwner()
-                                .HasForeignKey("WeatherReportId");
+                                .HasForeignKey("WeatherReportCityId");
                         });
 
                     b.OwnsMany("KnowWeatherApp.API.Entities.Weather.DailyWeatherReport", "DailyReports", b1 =>
                         {
-                            b1.Property<int>("WeatherReportId")
-                                .HasColumnType("int");
+                            b1.Property<string>("WeatherReportCityId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -445,19 +435,19 @@ namespace KnowWeatherApp.API.Migrations
                             b1.Property<double>("WindSpeed")
                                 .HasColumnType("float");
 
-                            b1.HasKey("WeatherReportId", "Id");
+                            b1.HasKey("WeatherReportCityId", "Id");
 
                             b1.ToTable("WeatherReports");
 
                             b1.ToJson("DailyReports");
 
                             b1.WithOwner()
-                                .HasForeignKey("WeatherReportId");
+                                .HasForeignKey("WeatherReportCityId");
 
                             b1.OwnsOne("KnowWeatherApp.API.Entities.Weather.DailyTempDto", "FeelsLike", b2 =>
                                 {
-                                    b2.Property<int>("DailyWeatherReportWeatherReportId")
-                                        .HasColumnType("int");
+                                    b2.Property<string>("DailyWeatherReportWeatherReportCityId")
+                                        .HasColumnType("nvarchar(450)");
 
                                     b2.Property<int>("DailyWeatherReportId")
                                         .HasColumnType("int");
@@ -480,18 +470,18 @@ namespace KnowWeatherApp.API.Migrations
                                     b2.Property<double>("Night")
                                         .HasColumnType("float");
 
-                                    b2.HasKey("DailyWeatherReportWeatherReportId", "DailyWeatherReportId");
+                                    b2.HasKey("DailyWeatherReportWeatherReportCityId", "DailyWeatherReportId");
 
                                     b2.ToTable("WeatherReports");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("DailyWeatherReportWeatherReportId", "DailyWeatherReportId");
+                                        .HasForeignKey("DailyWeatherReportWeatherReportCityId", "DailyWeatherReportId");
                                 });
 
                             b1.OwnsOne("KnowWeatherApp.API.Entities.Weather.DailyTempDto", "Temp", b2 =>
                                 {
-                                    b2.Property<int>("DailyWeatherReportWeatherReportId")
-                                        .HasColumnType("int");
+                                    b2.Property<string>("DailyWeatherReportWeatherReportCityId")
+                                        .HasColumnType("nvarchar(450)");
 
                                     b2.Property<int>("DailyWeatherReportId")
                                         .HasColumnType("int");
@@ -514,12 +504,12 @@ namespace KnowWeatherApp.API.Migrations
                                     b2.Property<double>("Night")
                                         .HasColumnType("float");
 
-                                    b2.HasKey("DailyWeatherReportWeatherReportId", "DailyWeatherReportId");
+                                    b2.HasKey("DailyWeatherReportWeatherReportCityId", "DailyWeatherReportId");
 
                                     b2.ToTable("WeatherReports");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("DailyWeatherReportWeatherReportId", "DailyWeatherReportId");
+                                        .HasForeignKey("DailyWeatherReportWeatherReportCityId", "DailyWeatherReportId");
                                 });
 
                             b1.Navigation("FeelsLike")
@@ -531,8 +521,8 @@ namespace KnowWeatherApp.API.Migrations
 
                     b.OwnsMany("KnowWeatherApp.API.Entities.Weather.HourlyWeatherReport", "HourlyReports", b1 =>
                         {
-                            b1.Property<int>("WeatherReportId")
-                                .HasColumnType("int");
+                            b1.Property<string>("WeatherReportCityId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -574,14 +564,14 @@ namespace KnowWeatherApp.API.Migrations
                             b1.Property<double>("Windspeed")
                                 .HasColumnType("float");
 
-                            b1.HasKey("WeatherReportId", "Id");
+                            b1.HasKey("WeatherReportCityId", "Id");
 
                             b1.ToTable("WeatherReports");
 
                             b1.ToJson("HourlyReports");
 
                             b1.WithOwner()
-                                .HasForeignKey("WeatherReportId");
+                                .HasForeignKey("WeatherReportCityId");
                         });
 
                     b.Navigation("City");

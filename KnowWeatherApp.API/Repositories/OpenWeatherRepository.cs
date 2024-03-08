@@ -1,5 +1,6 @@
 ﻿using KnowWeatherApp.API.Entities.Weather;
 using KnowWeatherApp.API.Interfaces;
+using KnowWeatherApp.API.Models.OpenWeather;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using WeatherPass.FunctionApp.Helpers;
@@ -17,7 +18,7 @@ namespace KnowWeatherApp.API.Repositories
             this.options = options;
         }
 
-        public async Task<WeatherReport> GetWeatherByLocation(double lat, double lon, CancellationToken cancel)
+        public async Task<WeatherReportDto> GetWeatherByLocation(double lat, double lon, CancellationToken cancel)
         {
             using var httpclient = this.httpClientFactory.CreateClient("WeatherAPI");
 
@@ -28,7 +29,7 @@ namespace KnowWeatherApp.API.Repositories
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var weatherReport = JsonSerializer.Deserialize<WeatherReport>(
+            var weatherReport = JsonSerializer.Deserialize<WeatherReportDto>(
                 content,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
