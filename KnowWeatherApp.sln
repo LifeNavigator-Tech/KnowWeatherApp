@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.API", "KnowWeatherApp.API\KnowWeatherApp.API.csproj", "{1051A6C1-C6E7-430D-A9C7-F7A77E91E0BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Domain", "KnowWeatherApp.DB\KnowWeatherApp.Domain.csproj", "{50D5DC16-94E6-44ED-99F2-B6EF7D8A2E14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Domain", "KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj", "{50D5DC16-94E6-44ED-99F2-B6EF7D8A2E14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Functions", "KnowWeatherApp.Functions\KnowWeatherApp.Functions.csproj", "{14CCC779-09F9-4034-8493-C768F66EB099}"
 EndProject

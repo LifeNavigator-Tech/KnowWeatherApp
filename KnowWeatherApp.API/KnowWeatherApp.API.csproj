@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KnowWeatherApp.Contracts\KnowWeatherApp.Contracts.csproj" />
-    <ProjectReference Include="..\KnowWeatherApp.DB\KnowWeatherApp.Domain.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj" />
     <ProjectReference Include="..\KnowWeatherApp.Persistence\KnowWeatherApp.Persistence.csproj" />
     <ProjectReference Include="..\KnowWeatherApp.Services.Abstractions\KnowWeatherApp.Services.Abstractions.csproj" />
     <ProjectReference Include="..\KnowWeatherApp.Services\KnowWeatherApp.Services.csproj" />

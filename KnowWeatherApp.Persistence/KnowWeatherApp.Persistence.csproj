@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KnowWeatherApp.DB\KnowWeatherApp.Domain.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
