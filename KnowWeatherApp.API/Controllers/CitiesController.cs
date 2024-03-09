@@ -1,5 +1,6 @@
-﻿using KnowWeatherApp.API.Interfaces;
-using KnowWeatherApp.API.Models;
+﻿using KnowWeatherApp.Common.Interfaces;
+using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Domain.Repositories;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,19 +15,19 @@ namespace KnowWeatherApp.API.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ICityRepository cityRepository;
-        private readonly ICurrentUserService currentUserService;
+        private readonly ICurrentUserHelper currentUserHelper;
 
         /// <summary>
         /// Constructor with dependencies.
         /// </summary>
         /// <param name="cityRepository"></param>
-        /// <param name="currentUserService"></param>
+        /// <param name="currentUserHelper"></param>
         public CitiesController(
             ICityRepository cityRepository,
-            ICurrentUserService currentUserService)
+            ICurrentUserHelper currentUserHelper)
         {
             this.cityRepository = cityRepository;
-            this.currentUserService = currentUserService;
+            this.currentUserHelper = currentUserHelper;
         }
         /// <summary>
         /// Search cities by name, state and country
@@ -37,9 +38,9 @@ namespace KnowWeatherApp.API.Controllers
         [HttpGet("search")]
         [ProducesResponseType(typeof(List<CityDto>), 200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Search([FromQuery] SearchCityRequestDto city, CancellationToken cancel)
+        public async Task<IActionResult> Search([FromQuery] SearchCityRequestDto request, CancellationToken cancel)
         {
-            var result = await this.cityRepository.FindByCityAsync(city, cancel);
+            var result = await this.cityRepository.FindByCityAsync(request.Name, request.State, request.Country, cancel);
             if (result == null) return NotFound();
             return Ok(result.AsQueryable().Select(x => x.Adapt<CityDto>()));
         }
@@ -55,7 +56,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCitiesByUserId(CancellationToken cancel)
         {
-            var result = await this.cityRepository.FindCitiesByUserId(this.currentUserService.UserId, cancel);
+            var result = await this.cityRepository.FindCitiesByUserId(this.currentUserHelper.UserId, cancel);
             if (result == null) return NotFound();
             return Ok(result.AsQueryable().Select(x => x.Adapt<CityDto>()));
         }
@@ -72,7 +73,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> AddCityToUser([FromBody] AddCityToUserRequest request, CancellationToken cancel)
         {
-            var result = await cityRepository.AddCityToUser(currentUserService.UserId, request.CityId, cancel);
+            var result = await cityRepository.AddCityToUser(currentUserHelper.UserId, request.CityId, cancel);
 
             if (result) return Ok();
             return BadRequest();

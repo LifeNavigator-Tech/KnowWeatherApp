@@ -1,6 +1,7 @@
-﻿using KnowWeatherApp.API.Interfaces;
-using KnowWeatherApp.API.Models;
-using KnowWeatherApp.API.Models.OpenWeather;
+﻿using KnowWeatherApp.Common.Interfaces;
+using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.OpenWeather;
+using KnowWeatherApp.Domain.Repositories;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,17 @@ namespace KnowWeatherApp.API.Controllers
     public class WeatherReportController : ControllerBase
     {
         private readonly IWeatherReportRepository userWeatherReportRepository;
-        private readonly IOpenWeatherRepository openWeatherRepository;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IOpenWeatherService openWeatherService;
+        private readonly ICurrentUserHelper currentUserHelper;
 
         public WeatherReportController(
             IWeatherReportRepository userWeatherReportRepository,
-            IOpenWeatherRepository openWeatherRepository,
-            ICurrentUserService currentUserService)
+            IOpenWeatherService openWeatherRepository,
+            ICurrentUserHelper currentUserHelper)
         {
             this.userWeatherReportRepository = userWeatherReportRepository;
-            this.openWeatherRepository = openWeatherRepository;
-            this.currentUserService = currentUserService;
+            this.openWeatherService = openWeatherService;
+            this.currentUserHelper = currentUserHelper;
         }
 
         /// <summary>
@@ -38,12 +39,12 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Index(string cityId, CancellationToken cancel)
         {
-            if(string.IsNullOrWhiteSpace(cityId))
+            if (string.IsNullOrWhiteSpace(cityId))
             {
                 return BadRequest("City id can not be empty");
             }
 
-            var cityReport = await this.userWeatherReportRepository.GetUserWeatherReport(currentUserService.UserId, cityId, cancel);
+            var cityReport = await this.userWeatherReportRepository.GetUserWeatherReport(currentUserHelper.UserId, cityId, cancel);
 
             if (cityReport == null)
             {
@@ -64,7 +65,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(typeof(WeatherReportDto), 200)]
         public async Task<IActionResult> GetWeatherReportByCity(double lat, double lon, CancellationToken cancel)
         {
-            var cityReport = await this.openWeatherRepository.GetWeatherByLocation(lat, lon, cancel);
+            var cityReport = await this.openWeatherService.GetWeatherByLocation(lat, lon, cancel);
             return Ok(cityReport);
         }
     }

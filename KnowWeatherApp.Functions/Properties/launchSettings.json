@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "KnowWeatherApp.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7273",
+      "launchBrowser": false
+    }
+  }
+}

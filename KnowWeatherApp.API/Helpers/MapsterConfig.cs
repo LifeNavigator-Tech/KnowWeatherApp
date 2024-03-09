@@ -1,7 +1,7 @@
-﻿using KnowWeatherApp.API.Entities;
-using KnowWeatherApp.API.Entities.Weather;
-using KnowWeatherApp.API.Models;
-using KnowWeatherApp.API.Models.OpenWeather;
+﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.OpenWeather;
+using KnowWeatherApp.Domain.Entities;
+using KnowWeatherApp.Domain.Entities.Weather;
 using Mapster;
 
 namespace KnowWeatherApp.API.Helpers;

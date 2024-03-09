@@ -1,10 +1,13 @@
-using KnowWeatherApp.API.Configurations;
-using KnowWeatherApp.API.Entities;
 using KnowWeatherApp.API.Helpers;
-using KnowWeatherApp.API.Interfaces;
-using KnowWeatherApp.API.Repositories;
-using KnowWeatherApp.API.Services;
+using KnowWeatherApp.Common.Interfaces;
+using KnowWeatherApp.Common.Repositories;
+using KnowWeatherApp.Domain.Entities;
+using KnowWeatherApp.Domain.Repositories;
+using KnowWeatherApp.Persistence;
+using KnowWeatherApp.Persistence.Repositories;
+using KnowWeatherApp.Services.Configurations;
 using Mapster;
+using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -12,14 +15,15 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICityRepository, CityRepository>();
-builder.Services.AddScoped<IWeatherReportRepository, UserWeatherReportRepository>();
-builder.Services.AddScoped<IOpenWeatherRepository, OpenWeatherRepository>();
-builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
+builder.Services.AddScoped<IOpenWeatherService, OpenWeatherService>();
+builder.Services.AddScoped<ICurrentUserHelper, CurrentUserHelper>();
 
 builder.Services.RegisterMapsterConfiguration();
-builder.Services.AddHostedService<WeatherReportService>();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<KnowWeatherDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<KnowWeatherDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -73,6 +77,8 @@ builder.Services.AddHttpClient("WeatherAPI", options =>
 
 var app = builder.Build();
 
+await ApplyMigrations(app.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -87,8 +93,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.SetCurrentUser();
-
 app.MapIdentityApi<AppUser>();
 
 app.MapControllerRoute(
@@ -96,3 +100,11 @@ app.MapControllerRoute(
     pattern: "{controller=Addresses}/{action=Index}");
 
 app.Run();
+
+
+static async Task ApplyMigrations(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    await using KnowWeatherDbContext dbContext = scope.ServiceProvider.GetRequiredService<KnowWeatherDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
