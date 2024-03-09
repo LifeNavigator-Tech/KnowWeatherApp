@@ -14,8 +14,7 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<ICityRepository, CityRepository>();
-builder.Services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
+builder.Services.AddScoped<ICityRepository, CitytRepository>();
 builder.Services.AddScoped<IOpenWeatherService, OpenWeatherService>();
 builder.Services.AddScoped<ICurrentUserHelper, CurrentUserHelper>();
 

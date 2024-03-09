@@ -1,5 +1,6 @@
 ﻿using KnowWeatherApp.Common.Interfaces;
 using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.OpenWeather;
 using KnowWeatherApp.Domain.Repositories;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -7,28 +8,67 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KnowWeatherApp.API.Controllers
 {
-    /// <summary>
-    /// Represents cities resource.
-    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class CitiesController : ControllerBase
     {
         private readonly ICityRepository cityRepository;
+        private readonly IOpenWeatherService openWeatherService;
         private readonly ICurrentUserHelper currentUserHelper;
 
-        /// <summary>
-        /// Constructor with dependencies.
-        /// </summary>
-        /// <param name="cityRepository"></param>
-        /// <param name="currentUserHelper"></param>
         public CitiesController(
             ICityRepository cityRepository,
+            IOpenWeatherService openWeatherService,
             ICurrentUserHelper currentUserHelper)
         {
             this.cityRepository = cityRepository;
+            this.openWeatherService = openWeatherService;
             this.currentUserHelper = currentUserHelper;
         }
+
+        /// <summary>
+        /// Get weather report by a city id
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        [HttpGet("{cityId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(List<CityDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Index(string cityId, CancellationToken cancel)
+        {
+            if (string.IsNullOrWhiteSpace(cityId))
+            {
+                return BadRequest("City id can not be empty");
+            }
+
+            var cityReport = await this.cityRepository.GetWeatherReport(currentUserHelper.UserId, cityId, cancel);
+
+            if (cityReport == null)
+            {
+                return NotFound("City was not found");
+            }
+
+            return Ok(cityReport.Adapt<CityDto>());
+        }
+
+        /// <summary>
+        /// Get weather report by latitude and longitude
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        [HttpGet("report")]
+        [ProducesResponseType(typeof(WeatherReportDto), 200)]
+        public async Task<IActionResult> GetWeatherReportByCity(double lat, double lon, CancellationToken cancel)
+        {
+            var cityReport = await this.openWeatherService.GetWeatherByLocation(lat, lon, cancel);
+            return Ok(cityReport);
+        }
+
         /// <summary>
         /// Search cities by name, state and country
         /// </summary>
@@ -40,7 +80,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Search([FromQuery] SearchCityRequestDto request, CancellationToken cancel)
         {
-            var result = await this.cityRepository.FindByCityAsync(request.Name, request.State, request.Country, cancel);
+            var result = await this.cityRepository.FindCities(request.Name, request.State, request.Country, cancel);
             if (result == null) return NotFound();
             return Ok(result.AsQueryable().Select(x => x.Adapt<CityDto>()));
         }
@@ -56,7 +96,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCitiesByUserId(CancellationToken cancel)
         {
-            var result = await this.cityRepository.FindCitiesByUserId(this.currentUserHelper.UserId, cancel);
+            var result = await this.cityRepository.FindCities(this.currentUserHelper.UserId, cancel);
             if (result == null) return NotFound();
             return Ok(result.AsQueryable().Select(x => x.Adapt<CityDto>()));
         }
