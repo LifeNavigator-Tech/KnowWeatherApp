@@ -7,10 +7,10 @@ using KnowWeatherApp.Persistence;
 using KnowWeatherApp.Persistence.Repositories;
 using KnowWeatherApp.Services.Configurations;
 using Mapster;
-using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using KnowWeatherApp.Services.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,6 @@ builder.Services.AddScoped<ICityRepository, CitytRepository>();
 builder.Services.AddScoped<IOpenWeatherService, OpenWeatherService>();
 builder.Services.AddScoped<ICurrentUserHelper, CurrentUserHelper>();
 
-builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<KnowWeatherDbContext>(options =>
@@ -31,6 +30,8 @@ builder.Services.AddIdentityApiEndpoints<AppUser>()
 
 TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 builder.Services.AddMapster();
+builder.Services.RegisterMapsterConfiguration();
+
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 

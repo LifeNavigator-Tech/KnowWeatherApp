@@ -3,8 +3,9 @@ using KnowWeatherApp.Contracts.OpenWeather;
 using KnowWeatherApp.Domain.Entities;
 using KnowWeatherApp.Domain.Entities.Weather;
 using Mapster;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace KnowWeatherApp.API.Helpers;
+namespace KnowWeatherApp.Services.Helpers;
 public static class MapsterConfig
 {
     public static void RegisterMapsterConfiguration(this IServiceCollection services)

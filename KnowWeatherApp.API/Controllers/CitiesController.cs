@@ -72,7 +72,7 @@ namespace KnowWeatherApp.API.Controllers
         /// <summary>
         /// Search cities by name, state and country
         /// </summary>
-        /// <param name="city"></param>
+        /// <param name="request"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
         [HttpGet("search")]

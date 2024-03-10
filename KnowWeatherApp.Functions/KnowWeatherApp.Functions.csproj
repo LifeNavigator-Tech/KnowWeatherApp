@@ -5,9 +5,12 @@
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>32c2d56e-0fbb-4143-ad20-e6d72bcf5a95</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.Functions.Worker" Version="7.1.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.20.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.0" />
@@ -15,6 +18,13 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.16.4" />
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Persistence\KnowWeatherApp.Persistence.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Services.Abstractions\KnowWeatherApp.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Services\KnowWeatherApp.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -51,6 +51,7 @@ namespace KnowWeatherApp.Persistence.Repositories
 
             if (weatherEntity == null)
             {
+                weatherReport.CityId = cityId;
                 await dbContext.WeatherReports.AddAsync(weatherReport);
             }
             else
