@@ -1,6 +1,7 @@
 ﻿using KnowWeatherApp.Common.Interfaces;
 using KnowWeatherApp.Contracts;
 using KnowWeatherApp.Contracts.OpenWeather;
+using KnowWeatherApp.Domain.Entities.Weather;
 using KnowWeatherApp.Domain.Repositories;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -80,7 +81,7 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Search([FromQuery] SearchCityRequestDto request, CancellationToken cancel)
         {
-            var result = await this.cityRepository.FindCities(request.Name, request.State, request.Country, cancel);
+            var result = await this.cityRepository.FindCities(request, cancel);
             if (result == null) return NotFound();
             return Ok(result.AsQueryable().Select(x => x.Adapt<CityDto>()));
         }
@@ -113,10 +114,16 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> AddCityToUser([FromBody] AddCityToUserRequest request, CancellationToken cancel)
         {
-            var result = await cityRepository.AddCityToUser(currentUserHelper.UserId, request.CityId, cancel);
+            var city = await cityRepository.AddCityToUser(currentUserHelper.UserId, request.CityId, cancel);
 
-            if (result) return Ok();
-            return BadRequest();
+            if (city.WeatherReport == null)
+            {
+                var cityReport = await this.openWeatherService.GetWeatherByLocation(city.Lat, city.Lon, cancel);
+                var report = cityReport.Adapt<WeatherReport>();
+                await cityRepository.AssignReportToACityAsync(city.Id, report, cancel);
+            }
+
+            return Ok();
         }
     }
 }

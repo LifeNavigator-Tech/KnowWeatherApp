@@ -5,21 +5,23 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.API", "KnowWeatherApp.API\KnowWeatherApp.API.csproj", "{1051A6C1-C6E7-430D-A9C7-F7A77E91E0BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Domain", "KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj", "{50D5DC16-94E6-44ED-99F2-B6EF7D8A2E14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Domain", "KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj", "{50D5DC16-94E6-44ED-99F2-B6EF7D8A2E14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Functions", "KnowWeatherApp.Functions\KnowWeatherApp.Functions.csproj", "{14CCC779-09F9-4034-8493-C768F66EB099}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Functions", "KnowWeatherApp.Functions\KnowWeatherApp.Functions.csproj", "{14CCC779-09F9-4034-8493-C768F66EB099}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Services", "KnowWeatherApp.Services\KnowWeatherApp.Services.csproj", "{11F0DDC7-2AC6-4FFF-98DB-5B93AF8A12B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Services", "KnowWeatherApp.Services\KnowWeatherApp.Services.csproj", "{11F0DDC7-2AC6-4FFF-98DB-5B93AF8A12B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Services.Abstractions", "KnowWeatherApp.Services.Abstractions\KnowWeatherApp.Services.Abstractions.csproj", "{17701137-F105-4D38-B9E3-AF6AFB9CDD46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Services.Abstractions", "KnowWeatherApp.Services.Abstractions\KnowWeatherApp.Services.Abstractions.csproj", "{17701137-F105-4D38-B9E3-AF6AFB9CDD46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Persistence", "KnowWeatherApp.Persistence\KnowWeatherApp.Persistence.csproj", "{997D864C-D2B2-44EB-80D3-1E199940D725}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Persistence", "KnowWeatherApp.Persistence\KnowWeatherApp.Persistence.csproj", "{997D864C-D2B2-44EB-80D3-1E199940D725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowWeatherApp.Contracts", "KnowWeatherApp.Contracts\KnowWeatherApp.Contracts.csproj", "{F166626D-28F6-4583-9724-34D42F0F8A38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowWeatherApp.Contracts", "KnowWeatherApp.Contracts\KnowWeatherApp.Contracts.csproj", "{F166626D-28F6-4583-9724-34D42F0F8A38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{450FFA7F-4C5B-4103-9BB5-2DCB6C7D7623}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{07262CEE-B13D-4BEE-9AF0-423CB0FF8158}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{AE736D7A-6927-44EB-94AD-D332944337AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,7 +62,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{1051A6C1-C6E7-430D-A9C7-F7A77E91E0BE} = {AE736D7A-6927-44EB-94AD-D332944337AE}
 		{50D5DC16-94E6-44ED-99F2-B6EF7D8A2E14} = {450FFA7F-4C5B-4103-9BB5-2DCB6C7D7623}
+		{14CCC779-09F9-4034-8493-C768F66EB099} = {07262CEE-B13D-4BEE-9AF0-423CB0FF8158}
 		{11F0DDC7-2AC6-4FFF-98DB-5B93AF8A12B9} = {450FFA7F-4C5B-4103-9BB5-2DCB6C7D7623}
 		{17701137-F105-4D38-B9E3-AF6AFB9CDD46} = {450FFA7F-4C5B-4103-9BB5-2DCB6C7D7623}
 		{997D864C-D2B2-44EB-80D3-1E199940D725} = {07262CEE-B13D-4BEE-9AF0-423CB0FF8158}
