@@ -1,9 +1,10 @@
-﻿using KnowWeatherApp.Contracts.OpenWeather;
+﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.OpenWeather;
 
 namespace KnowWeatherApp.Common.Interfaces
 {
     public interface IOpenWeatherService
     {
-        Task<WeatherReportDto> GetWeatherByLocation(double lat, double lon, CancellationToken cancel);
+        Task<WeatherReportDto> GetWeatherByLocation(GetWeatherReportByLocationRequest request, CancellationToken cancel);
     }
 }

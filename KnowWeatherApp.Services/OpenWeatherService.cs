@@ -1,4 +1,5 @@
 ﻿using KnowWeatherApp.Common.Interfaces;
+using KnowWeatherApp.Contracts;
 using KnowWeatherApp.Contracts.OpenWeather;
 using KnowWeatherApp.Services.Configurations;
 using Microsoft.Extensions.Options;
@@ -17,11 +18,11 @@ namespace KnowWeatherApp.Common.Repositories
             this.options = options;
         }
 
-        public async Task<WeatherReportDto> GetWeatherByLocation(double lat, double lon, CancellationToken cancel)
+        public async Task<WeatherReportDto> GetWeatherByLocation(GetWeatherReportByLocationRequest request, CancellationToken cancel)
         {
             using var httpclient = httpClientFactory.CreateClient("WeatherAPI");
 
-            var weatherUrlQuery = $"?lat={lat}&lon={lon}&appid={options.Value.APIKEY}&units=imperial";
+            var weatherUrlQuery = $"?lat={request.Lat}&lon={request.Lon}&appid={options.Value.APIKEY}&units=imperial";
             var response = await httpclient.GetAsync(weatherUrlQuery, cancel);
 
             response.EnsureSuccessStatusCode();
@@ -32,7 +33,7 @@ namespace KnowWeatherApp.Common.Repositories
                 content,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return weatherReport;
+            return weatherReport ?? new WeatherReportDto();
         }
     }
 }

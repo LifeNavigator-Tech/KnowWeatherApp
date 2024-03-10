@@ -36,46 +36,13 @@ namespace KnowWeatherApp.Persistence.Repositories
                 await dbContext.SaveChangesAsync(cancel);
             }
 
-            return city;
-        }
-
-        public async Task<bool> AssignReportToACityAsync(string cityId, WeatherReport weatherReport, CancellationToken cancel)
-        {
-            var cityExists = await dbContext.Cities.AnyAsync(x => x.Id == cityId);
-            if (!cityExists)
-            {
-                return false;
-            }
-
-            var weatherEntity = await dbContext.WeatherReports.Include(x => x.City).FirstOrDefaultAsync(x => x.CityId == cityId);
-
-            if (weatherEntity == null)
-            {
-                weatherReport.CityId = cityId;
-                await dbContext.WeatherReports.AddAsync(weatherReport);
-            }
-            else
-            {
-                weatherEntity.DailyReports = weatherReport.DailyReports;
-                weatherEntity.HourlyReports = weatherReport.HourlyReports;
-                weatherEntity.Current = weatherReport.Current;
-            }
-
-
-            await dbContext.SaveChangesAsync(cancel);
-            return true;
+            return city ?? new City();
         }
 
         public async Task<IEnumerable<City>> GetCitiesToUpdate(CancellationToken cancel)
             => await dbContext.Cities.Where(s => s.Users.Count > 0).ToListAsync(cancel);
 
-        public async Task<City?> GetWeatherReport(string userId, string cityId, CancellationToken cancel)
-            => await dbContext.Cities
-                             .Include(x => x.WeatherReport)
-                                .ThenInclude(x => x.DailyReports)
-                             .Include(x => x.WeatherReport)
-                                .ThenInclude(x => x.HourlyReports)
-                            .FirstOrDefaultAsync(x => x.Users.Select(u => u.Id).Contains(userId)
-                                                    && x.Id == cityId, cancel);
+        public async Task<bool> ExistsAsync(string cityId, CancellationToken cancel)
+            => await dbContext.Cities.AnyAsync(x => x.Id == cityId, cancel);
     }
 }
