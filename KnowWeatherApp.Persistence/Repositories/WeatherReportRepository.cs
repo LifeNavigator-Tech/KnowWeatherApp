@@ -34,15 +34,17 @@ namespace KnowWeatherApp.Persistence.Repositories
             if (weatherEntity == null)
             {
                 weatherReport.CityId = cityId;
+                weatherReport.Created = DateTime.UtcNow;
+                weatherReport.Updated = DateTime.UtcNow;
                 await dbContext.WeatherReports.AddAsync(weatherReport);
             }
             else
             {
+                weatherEntity.Updated = DateTime.UtcNow;
                 weatherEntity.DailyReports = weatherReport.DailyReports;
                 weatherEntity.HourlyReports = weatherReport.HourlyReports;
                 weatherEntity.Current = weatherReport.Current;
             }
-
 
             await dbContext.SaveChangesAsync(cancel);
         }

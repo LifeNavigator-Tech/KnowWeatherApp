@@ -17,6 +17,7 @@ var host = new HostBuilder()
     {
         services.AddScoped<ICityRepository, CitytRepository>();
         services.AddScoped<IOpenWeatherService, OpenWeatherService>();
+        services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.Configure<OpenWeatherSettings>(

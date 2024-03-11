@@ -13,7 +13,9 @@ public class WeatherReport
     public double Lon { get; set; }
     public string? TimeZone { get; set; }
     public int TimeZoneOffset { get; set; }
-    public CurrentWeatherReport Current { get; set; }
-    public List<HourlyWeatherReport> HourlyReports { get; set; }
-    public List<DailyWeatherReport> DailyReports { get; set; }
+    public CurrentWeatherReport Current { get; set; } = new CurrentWeatherReport();
+    public List<HourlyWeatherReport> HourlyReports { get; set; } = new List<HourlyWeatherReport>();
+    public List<DailyWeatherReport> DailyReports { get; set; } = new List<DailyWeatherReport>();
+    public DateTime Created { get; set; }
+    public DateTime Updated { get; set; }
 }

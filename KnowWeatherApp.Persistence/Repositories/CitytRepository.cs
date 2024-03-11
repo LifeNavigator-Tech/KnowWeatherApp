@@ -40,7 +40,11 @@ namespace KnowWeatherApp.Persistence.Repositories
         }
 
         public async Task<IEnumerable<City>> GetCitiesToUpdate(CancellationToken cancel)
-            => await dbContext.Cities.Where(s => s.Users.Count > 0).ToListAsync(cancel);
+            => await dbContext.Cities
+            .Where(s => 
+                s.Users.Count > 0 
+                && (s.WeatherReport == null || s.WeatherReport.Updated < DateTime.UtcNow.AddHours(-4)))
+            .ToListAsync(cancel);
 
         public async Task<bool> ExistsAsync(string cityId, CancellationToken cancel)
             => await dbContext.Cities.AnyAsync(x => x.Id == cityId, cancel);
