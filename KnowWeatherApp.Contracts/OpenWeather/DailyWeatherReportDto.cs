@@ -26,8 +26,18 @@ public class DailyWeatherReportDto
     public double DewPoint { get; set; }
     [JsonPropertyName("wind_speed")]
     public double WindSpeed { get; set; }
+    [JsonPropertyName("wind_gust")]
+    public double WindGust { get; set; }
     [JsonPropertyName("temp")]
     public DailyTempDto Temp { get; set; }
     [JsonPropertyName("feels_like")]
     public DailyTempDto FeelsLike { get; set; }
+    public IEnumerable<GeneralWeatherDto> Weather { get; set; } = new List<GeneralWeatherDto>();
+    public int Clouds { get; set; }
+    [JsonPropertyName("pop")]
+    public double Precipitation { get; set; }
+    public int Humidity { get; set; }
+    public double Rain { get; set; }
+    public double Uvi { get; set; }
+
 }

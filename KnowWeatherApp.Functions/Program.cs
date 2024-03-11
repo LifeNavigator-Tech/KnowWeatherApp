@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using KnowWeatherApp.Services.Helpers;
+using KnowWeatherApp.Services.Abstractions;
+using KnowWeatherApp.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -18,6 +20,10 @@ var host = new HostBuilder()
         services.AddScoped<ICityRepository, CitytRepository>();
         services.AddScoped<IOpenWeatherService, OpenWeatherService>();
         services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
+        services.AddScoped<ITriggerRepository, TriggerRepository>();
+        services.AddScoped<IAzureQueueService, AzureQueueService>();
+        services.AddScoped<ITriggerAnalyzer, TriggerAnalyzer>();
+
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.Configure<OpenWeatherSettings>(

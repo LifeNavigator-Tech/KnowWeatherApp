@@ -4,6 +4,7 @@ using KnowWeatherApp.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KnowWeatherApp.API.Migrations
 {
     [DbContext(typeof(KnowWeatherDbContext))]
-    partial class KnowWeatherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311170333_Add-Triggers")]
+    partial class AddTriggers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,20 +171,11 @@ namespace KnowWeatherApp.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<int>("EqualityType")
                         .HasColumnType("int");
 
                     b.Property<int>("Field")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("Modified")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NotificationTypes")
                         .IsRequired()
@@ -197,8 +191,8 @@ namespace KnowWeatherApp.API.Migrations
                     b.Property<TimeOnly>("TimeToNotify")
                         .HasColumnType("time");
 
-                    b.Property<TimeOnly>("TimeToNotifyUtc")
-                        .HasColumnType("time");
+                    b.Property<int>("TriggerType")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()

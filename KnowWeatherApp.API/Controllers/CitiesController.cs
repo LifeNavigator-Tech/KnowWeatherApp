@@ -73,7 +73,8 @@ namespace KnowWeatherApp.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> AddCityToUser([FromBody] AddCityToUserRequest request, CancellationToken cancel)
         {
-            var city = await cityRepository.AddCityToUser(currentUserHelper.UserId, request.CityId, cancel);
+            var city = await cityRepository.AddCityToUser(currentUserHelper.UserId, request.CityId);
+            await cityRepository.SaveChangesAsync(cancel);
 
             if (city.WeatherReport == null)
             {

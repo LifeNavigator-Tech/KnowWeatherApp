@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KnowWeatherApp.Contracts\KnowWeatherApp.Contracts.csproj" />
+    <ProjectReference Include="..\KnowWeatherApp.Domain\KnowWeatherApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
