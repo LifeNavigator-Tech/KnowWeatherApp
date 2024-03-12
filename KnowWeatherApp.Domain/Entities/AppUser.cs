@@ -8,9 +8,11 @@ namespace KnowWeatherApp.Domain.Entities
         public List<City> Cities { get; set; } = new List<City>();
         public List<Trigger> Triggers { get; set; } = new List<Trigger>();
         [StringLength(256)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         [StringLength(256)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
+        [StringLength(128)]
+        public string? PhoneNumber { get; set; }
         public int TimeZoneOffset { get; set; }
     }
 }

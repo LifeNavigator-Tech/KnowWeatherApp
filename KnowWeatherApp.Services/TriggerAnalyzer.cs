@@ -1,4 +1,5 @@
-﻿using KnowWeatherApp.Domain.Entities;
+﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Domain.Entities;
 using KnowWeatherApp.Domain.Entities.Weather;
 using KnowWeatherApp.Domain.Enums;
 using KnowWeatherApp.Services.Abstractions;
@@ -13,14 +14,25 @@ namespace KnowWeatherApp.Services
         {
             this.azureQueueService = azureQueueService;
         }
-        public void AnalyzeWeatherReport(IEnumerable<Trigger> triggers)
+        public IEnumerable<NotificationDto> AnalyzeWeatherReport(IEnumerable<Trigger> triggers)
         {
+            var messages = new List<NotificationDto>();
             foreach (var trigger in triggers)
             {
                 if (trigger?.City?.WeatherReport == null) continue;
 
-                var result = AnalyzeDailyWeatherReport(trigger, trigger.City.WeatherReport.DailyReports);
+                var message = AnalyzeDailyWeatherReport(trigger, trigger.City.WeatherReport.DailyReports);
+
+                if (message == null) continue;
+
+                messages.Add(new NotificationDto()
+                {
+                    Text = trigger.Field.ToString(),
+                    UserName = $"{trigger.User.FirstName} {trigger.User.LastName}",
+                    Email = trigger.User.Email,
+                });
             }
+            return messages;
         }
 
         private DailyWeatherReport? AnalyzeDailyWeatherReport(Trigger trigger, List<DailyWeatherReport> dailyReports)

@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using KnowWeatherApp.Domain.Repositories;
 using KnowWeatherApp.Services.Abstractions;
 using Microsoft.Azure.Functions.Worker;
@@ -22,7 +24,8 @@ namespace KnowWeatherApp.Functions
         }
 
         [Function("TriggerRunner")]
-        public async Task Run([TimerTrigger("0 */5 * * * *"
+        [QueueOutput("weather-notifications", Connection = "KnowWeatherStorageConnectionString")]
+        public async Task<IEnumerable<string>> Run([TimerTrigger("0 */5 * * * *"
             #if DEBUG
             , RunOnStartup=true
             #endif
@@ -33,8 +36,12 @@ namespace KnowWeatherApp.Functions
             if (myTimer.ScheduleStatus is not null)
             {
                 var triggers = await this.triggerRepository.GetTriggersToRun(CancellationToken.None);
-                triggerAnalyzer.AnalyzeWeatherReport(triggers);
+                var messages = triggerAnalyzer.AnalyzeWeatherReport(triggers);
+
+                return messages.Select(s => JsonSerializer.Serialize(s));
             }
+
+            return new List<string>() { "empty text"};
         }
     }
 }

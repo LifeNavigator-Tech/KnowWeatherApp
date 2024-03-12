@@ -1,9 +1,10 @@
-﻿using KnowWeatherApp.Domain.Entities;
+﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Domain.Entities;
 
 namespace KnowWeatherApp.Services.Abstractions
 {
     public interface ITriggerAnalyzer
     {
-        void AnalyzeWeatherReport(IEnumerable<Trigger> triggers);
+        IEnumerable<NotificationDto> AnalyzeWeatherReport(IEnumerable<Trigger> triggers);
     }
 }
