@@ -22,7 +22,7 @@ var host = new HostBuilder()
         services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
         services.AddScoped<ITriggerRepository, TriggerRepository>();
         services.AddScoped<IAzureQueueService, AzureQueueService>();
-        services.AddScoped<ITriggerAnalyzer, TriggerAnalyzer>();
+        services.AddScoped<ITriggerAnalyzerService, TriggerAnalyzerService>();
 
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();

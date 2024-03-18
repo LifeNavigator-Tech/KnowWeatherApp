@@ -12,11 +12,11 @@ namespace KnowWeatherApp.Functions
     {
         private readonly ILogger _logger;
         private readonly ITriggerRepository triggerRepository;
-        private readonly ITriggerAnalyzer triggerAnalyzer;
+        private readonly ITriggerAnalyzerService triggerAnalyzer;
 
         public TriggerRunner(ILoggerFactory loggerFactory,
             ITriggerRepository triggerRepository,
-            ITriggerAnalyzer triggerAnalyzer)
+            ITriggerAnalyzerService triggerAnalyzer)
         {
             _logger = loggerFactory.CreateLogger<TriggerRunner>();
             this.triggerRepository = triggerRepository;

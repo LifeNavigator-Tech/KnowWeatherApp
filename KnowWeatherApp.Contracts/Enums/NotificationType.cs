@@ -1,4 +1,4 @@
-﻿namespace KnowWeatherApp.Domain.Enums
+﻿namespace KnowWeatherApp.Contracts.Enums
 {
     public enum NotificationType
     {

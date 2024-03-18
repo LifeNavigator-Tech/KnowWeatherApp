@@ -18,6 +18,7 @@ builder.Services.AddScoped<ICityRepository, CitytRepository>();
 builder.Services.AddScoped<IOpenWeatherService, OpenWeatherService>();
 builder.Services.AddScoped<ICurrentUserHelper, CurrentUserHelper>();
 builder.Services.AddScoped<IWeatherReportRepository, WeatherReportRepository>();
+builder.Services.AddScoped<ITriggerRepository, TriggerRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

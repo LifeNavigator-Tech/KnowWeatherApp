@@ -1,16 +1,16 @@
 ﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.Enums;
 using KnowWeatherApp.Domain.Entities;
 using KnowWeatherApp.Domain.Entities.Weather;
-using KnowWeatherApp.Domain.Enums;
 using KnowWeatherApp.Services.Abstractions;
 
 namespace KnowWeatherApp.Services
 {
-    public class TriggerAnalyzer : ITriggerAnalyzer
+    public class TriggerAnalyzerService : ITriggerAnalyzerService
     {
         private readonly IAzureQueueService azureQueueService;
 
-        public TriggerAnalyzer(IAzureQueueService azureQueueService)
+        public TriggerAnalyzerService(IAzureQueueService azureQueueService)
         {
             this.azureQueueService = azureQueueService;
         }
@@ -29,7 +29,9 @@ namespace KnowWeatherApp.Services
                 {
                     Text = trigger.Field.ToString(),
                     UserName = $"{trigger.User.FirstName} {trigger.User.LastName}",
-                    Email = trigger.User.Email,
+                    Email = trigger.User.Email ?? string.Empty,
+                    PhoneNumber = trigger.User.PhoneNumber ?? string.Empty,
+                    EventDate = DateTime.Now
                 });
             }
             return messages;
@@ -40,7 +42,7 @@ namespace KnowWeatherApp.Services
             Func<DailyWeatherReport, bool> filter = (report) => false;
 
             var gte = trigger.EqualityType == EqualityType.GreaterOrEqual;
-
+            var value = trigger.Threshold;
             switch (trigger.Field)
             {
                 case WeatherFieldType.Pressure:

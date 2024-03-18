@@ -11,8 +11,6 @@ namespace KnowWeatherApp.Domain.Entities
         public string? FirstName { get; set; }
         [StringLength(256)]
         public string? LastName { get; set; }
-        [StringLength(128)]
-        public string? PhoneNumber { get; set; }
         public int TimeZoneOffset { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using KnowWeatherApp.Domain.Enums;
+﻿using KnowWeatherApp.Contracts.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

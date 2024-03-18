@@ -1,4 +1,6 @@
 ﻿using KnowWeatherApp.Contracts;
+using KnowWeatherApp.Contracts.Extensions;
+using KnowWeatherApp.Contracts.Models.Triggers;
 using KnowWeatherApp.Contracts.OpenWeather;
 using KnowWeatherApp.Domain.Entities;
 using KnowWeatherApp.Domain.Entities.Weather;
@@ -26,5 +28,12 @@ public static class MapsterConfig
             .NewConfig()
             .Map(dest => dest.WeatherReport, src => src.WeatherReport.Adapt<WeatherReportDto>())
             .TwoWays();
+
+        TypeAdapterConfig<Trigger, TriggerSummaryDto>
+            .NewConfig()
+            .Map(dest => dest.City, src => $"{src.City.Name} {src.City.State}, {src.City.Country}")
+            .Map(dest => dest.NotificationTypes, src => $"{string.Join(", ", src.NotificationTypes.Select(s => s.ToString()))}")
+            .Map(dest => dest.EqualityType, src => src.EqualityType.GetEnumDescription())
+            .Map(dest => dest.Field, src => src.Field.GetEnumDescription());
     }
 }
