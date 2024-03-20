@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace KnowWeatherApp.Contracts.Extensions
@@ -7,7 +9,7 @@ namespace KnowWeatherApp.Contracts.Extensions
     {
         public static string GetEnumDescription(this Enum value)
         {
-            FieldInfo? fi = value.GetType().GetField(value.ToString());
+            FieldInfo fi = value.GetType().GetField(value.ToString());
             if (fi == null) return value.ToString();
 
             DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];

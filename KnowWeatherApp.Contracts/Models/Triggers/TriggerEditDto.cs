@@ -1,16 +1,18 @@
 ﻿using KnowWeatherApp.Contracts.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace KnowWeatherApp.Contracts.Models.Triggers
 {
     public class TriggerEditDto
     {
-        public required string CityId { get; set; }
+        public string CityId { get; set; }
         public List<NotificationType> NotificationTypes { get; set; } = new List<NotificationType>();
         public EqualityType EqualityType { get; set; }
-        public required string Threshold { get; set; }
-        public TimeOnly TimeToNotify { get; set; }
-        protected TimeOnly TimeToNotifyUtc => TimeOnly.FromTimeSpan(TimeToNotify.ToTimeSpan());
-        public TimeOnly TimeOfDayToCheck { get; set; }
+        public string Threshold { get; set; }
+        public DateTime TimeToNotify { get; set; }
+        protected DateTime TimeToNotifyUtc => TimeToNotify.ToUniversalTime();
+        public DateTime TimeOfDayToCheck { get; set; }
         public WeatherFieldType Field { get; set; }
         public bool IsActive { get; set; }
     }

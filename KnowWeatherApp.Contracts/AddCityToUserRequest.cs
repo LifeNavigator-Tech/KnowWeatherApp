@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KnowWeatherApp.Contracts;
-
-public class AddCityToUserRequest
+namespace KnowWeatherApp.Contracts
 {
-    [Required]
-    public string CityId { get; set; }
+    public class AddCityToUserRequest
+    {
+        [Required]
+        public string CityId { get; set; }
+    }
 }

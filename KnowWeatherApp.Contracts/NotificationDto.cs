@@ -1,4 +1,6 @@
-﻿namespace KnowWeatherApp.Contracts
+﻿using System;
+
+namespace KnowWeatherApp.Contracts
 {
     public class NotificationDto
     {

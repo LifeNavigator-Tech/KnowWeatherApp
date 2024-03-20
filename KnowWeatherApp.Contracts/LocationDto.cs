@@ -1,7 +1,9 @@
-﻿namespace KnowWeatherApp.Contracts;
-
-public class LocationDto
+﻿namespace KnowWeatherApp.Contracts
 {
-    public double Lat { get; set; }
-    public double Lon { get; set; }
+    public class LocationDto
+    {
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+    }
+
 }

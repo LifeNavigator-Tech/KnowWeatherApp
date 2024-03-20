@@ -1,0 +1,65 @@
+﻿@using KnowWeatherApp.Contracts
+@using KnowWeatherApp.WebUI.Interfaces
+
+@inject IKnowWeatherCitiesService knowWeatherCitiesService;
+
+<h3>Get Weather for Your City</h3>
+
+<EditForm Model="Model" OnValidSubmit="CitiesSearchAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="field has-addons">
+        <div class="control">
+            <input type="text" placeholder="City Name" class="input"
+                   @bind-value="Model!.City"/>
+        </div>
+        <div class="control">
+            <input type="text" placeholder="State" class="input"
+                   @bind-value="Model!.State"/>
+        </div>
+        <div class="control">
+            <input type="text" placeholder="Country" class="input"
+                   @bind-value="Model!.Country" />
+        </div>
+        <div class="control">
+            <button class="button is-info" type="submit">
+                Search
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+<ul>
+    @foreach(var city in cities)
+    {
+        <li>@string.Join(", ", [@city.Name, @city.State, @city.Country])</li>
+    }
+</ul>
+
+@code {
+
+    [SupplyParameterFromForm]
+    private SearchCityRequestDto? Model { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        Model = new SearchCityRequestDto();
+
+        base.OnInitialized();
+    }
+
+    private List<CityDto> cities = new List<CityDto>();
+
+    private async Task CitiesSearchAsync()
+    {
+        if (Model == null) return;
+
+        cities = (await knowWeatherCitiesService.GetCities(Model)).ToList();
+
+        if (!cities.Any())
+        {
+            cities.Add(new CityDto(){ Name = "No results"});
+        }
+    }
+}

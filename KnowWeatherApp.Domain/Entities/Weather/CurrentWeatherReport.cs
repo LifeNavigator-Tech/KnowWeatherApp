@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using KnowWeatherApp.Domain.Helpers;
+﻿using KnowWeatherApp.Contracts.Helpers;
+using System.Text.Json.Serialization;
 
 namespace KnowWeatherApp.Domain.Entities.Weather;
 public class CurrentWeatherReport

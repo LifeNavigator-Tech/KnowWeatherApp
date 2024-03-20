@@ -29,9 +29,16 @@ public static class MapsterConfig
             .Map(dest => dest.WeatherReport, src => src.WeatherReport.Adapt<WeatherReportDto>())
             .TwoWays();
 
+        TypeAdapterConfig<TriggerSummaryDto, Trigger>
+            .NewConfig()
+            .Map(src => src.TimeToNotify, dest => TimeOnly.FromDateTime(dest.TimeToNotify))
+            .Map(src => src.TimeOfDayToCheck, dest => TimeOnly.FromDateTime(dest.TimeOfDayToCheck));
+
         TypeAdapterConfig<Trigger, TriggerSummaryDto>
             .NewConfig()
             .Map(dest => dest.City, src => $"{src.City.Name} {src.City.State}, {src.City.Country}")
+            .Map(dest => dest.TimeToNotify, src => new DateTime(src.TimeToNotify.Ticks))
+            .Map(dest => dest.TimeOfDayToCheck, src => new DateTime(src.TimeOfDayToCheck.Ticks))
             .Map(dest => dest.NotificationTypes, src => $"{string.Join(", ", src.NotificationTypes.Select(s => s.ToString()))}")
             .Map(dest => dest.EqualityType, src => src.EqualityType.GetEnumDescription())
             .Map(dest => dest.Field, src => src.Field.GetEnumDescription());

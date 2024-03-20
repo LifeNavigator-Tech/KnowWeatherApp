@@ -1,5 +1,5 @@
-﻿using KnowWeatherApp.Contracts.OpenWeather;
-using KnowWeatherApp.Domain.Helpers;
+﻿using KnowWeatherApp.Contracts.Helpers;
+using KnowWeatherApp.Contracts.OpenWeather;
 using System.Text.Json.Serialization;
 
 namespace KnowWeatherApp.Domain.Entities.Weather;

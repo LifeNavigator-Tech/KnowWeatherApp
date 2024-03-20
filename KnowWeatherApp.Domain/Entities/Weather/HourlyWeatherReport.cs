@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using KnowWeatherApp.Contracts.Helpers;
 using KnowWeatherApp.Contracts.OpenWeather;
-using KnowWeatherApp.Domain.Helpers;
 namespace KnowWeatherApp.Domain.Entities.Weather;
 
 public class HourlyWeatherReport

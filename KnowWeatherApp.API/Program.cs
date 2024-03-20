@@ -22,6 +22,15 @@ builder.Services.AddScoped<ITriggerRepository, TriggerRepository>();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5041", "https://localhost:7064");
+        });
+});
+
 builder.Services.AddDbContext<KnowWeatherDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthorization();
@@ -89,6 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

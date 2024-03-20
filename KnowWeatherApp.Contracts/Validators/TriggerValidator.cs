@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using KnowWeatherApp.Contracts.Models.Triggers;
+using System;
 
 namespace KnowWeatherApp.Contracts.Validators
 {
